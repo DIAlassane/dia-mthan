@@ -1,0 +1,18 @@
+jsonschema => valider les requests du front-end avec des schemas prédifinie
+✅ refresh-token => plan B s'il ya une fuite de token
+escaping-html et css => eviter les injections asynchrone
+✅ ORM/ODM => contre les injections sur la database + sanityze des information envoyer a la database
+security linter => a voir...
+✅ module loading with variable
+rate limiter => pour limiter les req apres un certain nombre de req en un certain temp 
+authentification limits => limiter les demande de connexion et bloquer si trop de req
+✅ helmet => secure de headers
+npm audit => pour voir les vulnerabiliter de nos packages 
+
+✅ {` JWT REFRESH TOKEN `}
+✅ {` ORM/ODM Sequelize `}
+✅ {` HELMET `}
+✅ {` Secure Module loading by had coding `}
+
+billboard
+label, image
