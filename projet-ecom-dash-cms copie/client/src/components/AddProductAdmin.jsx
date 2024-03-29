@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import Header from "components/Header";
+import ValidationProduct from "protection/ValidationProduct";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,7 @@ const AddProductAdmin = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [errors, setErrors] = useState({});
   const token = useSelector((state) => state.token);
   const role = useSelector((state) => state.user?.roleId);
   const navigate = useNavigate();
@@ -64,31 +66,39 @@ const AddProductAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("image", selectedFile);
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("description", description);
-    formData.append("supply", supply);
-    formData.append("isFeatured", isFeatured);
-    formData.append("isArchived", isArchived);
-    formData.append("sizeId", selectedSize);
-    formData.append("categoryId", selectedCategory);
-    formData.append("colorId", selectedColor);
+    const newErrors = ValidationProduct({ name, price, description, supply });
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length === 0) {
+      // Si il n'y a pas d'erreurs, envoyez la requête
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("description", description);
+      formData.append("supply", supply);
+      formData.append("isFeatured", isFeatured);
+      formData.append("isArchived", isArchived);
+      formData.append("sizeId", selectedSize);
+      formData.append("categoryId", selectedCategory);
+      formData.append("colorId", selectedColor);
 
-    await axios
-      .post(`http://localhost:4000/management/product/${storeId}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-        roleId: role,
-      })
-      .then((response) => {
-        navigate("/productadmin");
-        console.log(response.data);
-      })
-      .catch((error) => {
-        navigate("/home");
-        console.log(error);
-      });
+      await axios
+        .post(`http://localhost:4000/management/product/${storeId}`, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+          roleId: role,
+        })
+        .then((response) => {
+          navigate("/productadmin");
+          console.log(response.data);
+        })
+        .catch((error) => {
+          navigate("/home");
+          console.log(error);
+        });
+    } else {
+      // Sinon, affichez les erreurs
+      console.log(errors);
+    }
   };
 
   const handleFileChange = (event) => {
@@ -122,6 +132,8 @@ const AddProductAdmin = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  error={errors.name ? true : false}
+                  helperText={errors.name}
                 />
               </FormControl>
             </Grid>
@@ -132,6 +144,8 @@ const AddProductAdmin = () => {
                   type="text"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
+                  error={errors.price ? true : false}
+                  helperText={errors.price}
                 />
               </FormControl>
             </Grid>
@@ -142,6 +156,8 @@ const AddProductAdmin = () => {
                   type="text"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  error={errors.description ? true : false}
+                  helperText={errors.description}
                 />
               </FormControl>
             </Grid>
@@ -152,6 +168,8 @@ const AddProductAdmin = () => {
                   type="text"
                   value={supply}
                   onChange={(e) => setSupply(e.target.value)}
+                  error={errors.supply ? true : false}
+                  helperText={errors.supply}
                 />
               </FormControl>
             </Grid>

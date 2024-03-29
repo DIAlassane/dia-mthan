@@ -487,6 +487,7 @@ const deleteSize = async (req, res) => {
 
 const createProduct = async (req, res) => {
   try {
+    // tout ce que l'on requiere du body => Front-End
     const product = {
       name: req.body.name,
       price: req.body.price,
@@ -501,10 +502,13 @@ const createProduct = async (req, res) => {
       colorId: req.body.colorId,
     };
 
+    // requete de creation de la requete avec les element du request => 'product'
     const type = await Product.create(product);
+    // reponse envoyer au front avec le produit
     res.status(200).json(type);
     console.log(type);
   } catch (error) {
+    // erreur
     res.status(401).json({ error: error.message });
   }
 };
@@ -554,12 +558,13 @@ const updateProduct = async (req, res) => {
     };
     const id = req.params.id; // Récupérer l'identifiant de la couleur à mettre à jour depuis les paramètres de l'URL
 
-    // Utiliser la méthode update() de Sequelize pour mettre à jour la couleur dans la base de données
+    // Utiliser la méthode update() de Sequelize pour mettre à jour le produit dans la base de données
     const updatedProduct = await Product.update(
       product, // Les champs à mettre à jour
-      { where: { id } } // Condition pour la mise à jour (basée sur l'identifiant de la couleur)
+      { where: { id } } // Condition pour la mise à jour (basée sur l'identifiant du produit)
     );
 
+    // Retourner un message de succés
     res.json("Le produit a été mise à jour avec succès");
   } catch (error) {
     console.error("Erreur lors de la mise à jour de la taille :", error);
@@ -569,11 +574,13 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
+    // Récuperer 'id' dans l'url de la requête
     const { id } = req.params;
+    // Utiliser la méthode destroy() de Sequelize pour supprimer un produit
     const deleteProduct = await Product.destroy({
       where: { id: id },
     });
-
+    // Retourner un message de succés
     res.json("Product was deleted");
   } catch (err) {
     console.error(err.message);
@@ -617,6 +624,7 @@ const getRelatedProduct = async (req, res) => {
 
     // Appeler la fonction existante pour obtenir les produits associés
     const relatedProducts = await Product.findAll({
+      // Condition
       where: { categoryId: categoryId },
       limit: 3,
     });

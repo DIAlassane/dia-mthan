@@ -1,9 +1,9 @@
 import { useTheme } from "@emotion/react";
 import { Box, Button, ImageListItem, Rating, Typography } from "@mui/material";
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { addToCart } from "../../state/index";
 import RelatedProduct from "./RelatedProduct";
 import Review from "./Review";
@@ -13,12 +13,8 @@ const ProductDetail = () => {
   const [item, setItem] = useState({});
   const productDatas = useSelector((state) => state.productData);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const theme = useTheme();
   const [baseQty, setBaseQty] = useState(1);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [showMagnifier, setShowMagnifier] = useState(false);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const getComment = item.review;
   const storeId = useSelector((state) => state.currentStore);
   const [sizes, setSizes] = useState([]);
@@ -71,18 +67,6 @@ const ProductDetail = () => {
   // console.log(item);
   const { averageRating, totalReviews } = calculateAverageRating();
 
-  const handleMouseHover = useCallback((e) => {
-    const { left, top, width, height } =
-      e.currentTarget.getBoundingClientRect();
-
-    // calculer la position (x, y) en % baser sur la position du curseur
-    const x = ((e.pageX - left) / width) * 100;
-    const y = ((e.pageY - top) / height) * 100;
-    setPosition({ x, y });
-
-    setCursorPosition({ x: e.pageX - left, y: e.pageY - top });
-  }, []);
-
   useEffect(() => {
     // Recherchez le produit correspondant à l'ID dans productData
     const selectedItem = productDatas.find((product) => product.id === id);
@@ -118,21 +102,91 @@ const ProductDetail = () => {
     );
   };
 
+  // style
+  const style1 = {
+    padding: "2.5rem 1.5rem",
+    display: "flex",
+    height: "850px",
+    "@media(max-width: 1100px)": {
+      display: "block",
+      height: "auto",
+    },
+  };
+
+  const style2 = {
+    width: "100%",
+    height: "auto",
+    marginBottom: "1rem",
+    "@media(max-width: 1100px)": {
+      width: "404px",
+      height: "580px",
+    },
+  };
+
+  const style3 = {
+    width: "100%",
+    height: "100%",
+    "@media(max-width: 1100px)": {
+      width: "404px",
+      height: "580px",
+    },
+  };
+
+  const style4 = {
+    width: "50%",
+    height: "auto",
+    margin: "5% 3%",
+    padding: "2rem .5rem",
+    "@media(max-width: 1100px)": {
+      width: "95%",
+      height: "auto",
+    },
+  };
+
+  const style5 = {
+    display: "flex",
+    border: `2px solid ${theme.palette.background.font}`,
+    marginBottom: "1rem",
+    padding: "1rem 1.5rem",
+    justifyContent: "space-between",
+  };
+
+  const style6 = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    border: `2px solid ${theme.palette.background.font}`,
+    backgroundColor: theme.palette.primary[100],
+  };
+
+  const style7 = {
+    border: "none",
+    color: "red",
+    fontSize: "1rem",
+    fontWeight: 900,
+    cursor: "pointer",
+  };
+
+  const style8 = {
+    fontSize: "1.2rem",
+    marginLeft: ".5rem",
+    marginRight: ".5rem",
+    color: theme.palette.secondary[900],
+  };
+
+  const style9 = {
+    border: "none",
+    color: "green",
+    fontSize: "1rem",
+    fontWeight: 900,
+    cursor: "pointer",
+  };
+
   return (
     <Box>
       {" "}
-      <Box
-        key={item.id}
-        sx={{
-          padding: "2.5rem 1.5rem",
-          display: "flex",
-          height: "850px",
-          "@media(max-width: 1100px)": {
-            display: "block",
-            height: "auto",
-          },
-        }}
-      >
+      <Box key={item.id} sx={style1}>
         <Box
           sx={{
             width: "50%",
@@ -157,81 +211,19 @@ const ProductDetail = () => {
               height: "350px",
             }}
           >
-            <ImageListItem
-              key={item.image}
-              sx={{
-                width: "100%",
-                height: "auto",
-                marginBottom: "1rem",
-                "@media(max-width: 1100px)": {
-                  width: "404px",
-                  height: "580px",
-                },
-              }}
-              onMouseEnter={() => setShowMagnifier(true)}
-              onMouseLeave={() => setShowMagnifier(false)}
-              onMouseMove={handleMouseHover}
-            >
+            <ImageListItem key={item.image} sx={style2}>
               <img
                 src={`http://localhost:4000/${item.image}`}
                 alt={item.name}
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  "@media(max-width: 1100px)": {
-                    width: "404px",
-                    height: "580px",
-                  },
-                }}
+                sx={style3}
               />
             </ImageListItem>
-            {showMagnifier && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: `${cursorPosition.x - 100}px`,
-                  top: `${cursorPosition.y - 100}px`,
-                  pointerEvents: "none",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundImage: `url(http://localhost:4000/${item.image})`,
-                    backgroundPosition: `${position.x} ${position.y}`,
-                    width: "200px",
-                    height: "200px",
-                    border: "2px solid white",
-                  }}
-                />
-              </div>
-            )}
           </Box>
         </Box>
         {/* --------------------------------------- */}
 
-        <Box
-          sx={{
-            width: "50%",
-            height: "auto",
-            margin: "5% 3%",
-            padding: "2rem .5rem",
-            "@media(max-width: 1100px)": {
-              width: "95%",
-              height: "auto",
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              border: `2px solid ${theme.palette.background.font}`,
-              marginBottom: "1rem",
-              padding: "1rem 1.5rem",
-              justifyContent: "space-between",
-            }}
-          >
-            {/* ------------------------------------ */}
-
+        <Box sx={style4}>
+          <Box sx={style5}>
             <Box sx={{ display: "flex", gap: "20px" }}>
               <Typography variant="body1" sx={{ display: "block" }}>
                 Categorie: <br />
@@ -272,50 +264,19 @@ const ProductDetail = () => {
                 justifyContent: "space-around",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  border: `2px solid ${theme.palette.background.font}`,
-                  backgroundColor: theme.palette.primary[100],
-                }}
-              >
+              <Box sx={style6}>
                 <Button
                   onClick={() =>
                     setBaseQty(baseQty === 1 ? (baseQty = 1) : baseQty - 1)
                   }
-                  style={{
-                    border: "none",
-                    color: "red",
-                    fontSize: "1rem",
-                    fontWeight: 900,
-                    cursor: "pointer",
-                  }}
+                  style={style7}
                 >
                   -
                 </Button>
-                <Typography
-                  sx={{
-                    fontSize: "1.2rem",
-                    marginLeft: ".5rem",
-                    marginRight: ".5rem",
-                    color: theme.palette.secondary[900],
-                  }}
-                >
+                <Typography sx={style8}>
                   <span>{baseQty}</span>
                 </Typography>
-                <Button
-                  onClick={() => setBaseQty(baseQty + 1)}
-                  style={{
-                    border: "none",
-                    color: "green",
-                    fontSize: "1rem",
-                    fontWeight: 900,
-                    cursor: "pointer",
-                  }}
-                >
+                <Button onClick={() => setBaseQty(baseQty + 1)} style={style9}>
                   +
                 </Button>
               </Box>

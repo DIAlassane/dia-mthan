@@ -16,7 +16,6 @@ import FilterComponent from "./FilterComponent";
 import SearchInput from "./SearchInput";
 
 const ProductItem = ({ selectedPrice }) => {
-  const [products, setProducts] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const token = useSelector((state) => state.token);
@@ -34,7 +33,7 @@ const ProductItem = ({ selectedPrice }) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const location = useLocation();
   const selectedCategoryNav = location.state?.categoryId ?? null;
-  console.log(location);
+  const [products, setProducts] = useState();
 
   useEffect(() => {
     axios

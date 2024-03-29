@@ -37,11 +37,12 @@ function Login({ currentUser }) {
       console.log(response.data);
       navigate("/profil");
     } catch (error) {
-      console.log(error.message);
-      setLoginErrors(
-        "Erreur lors de la connexion. Veuillez réessayer.",
-        error.message
-      );
+      console.error("Erreur lors de la connexion:", error);
+      let errorMessage = "Erreur lors de la connexion. Veuillez réessayer.";
+      if (error.response && error.response.data && error.response.data.error) {
+        errorMessage = error.response.data.error;
+      }
+      setLoginErrors(errorMessage);
     }
   };
 

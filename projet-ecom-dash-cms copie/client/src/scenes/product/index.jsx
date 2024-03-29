@@ -8,6 +8,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import axios from "axios";
 import Header from "components/Header";
@@ -24,6 +25,8 @@ const ProductAdmin = () => {
   const [categories, setCategories] = useState([]);
   const [colors, setColors] = useState([]);
   const [activeId, setActiveId] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const token = useSelector((state) => state.token);
   const role = useSelector((state) => state.user?.roleId);
   const navigate = useNavigate();
@@ -108,6 +111,15 @@ const ProductAdmin = () => {
     }
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 5));
+    setPage(0);
+  };
+
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="Product" subtitle="Liste des Produits" />
@@ -122,9 +134,10 @@ const ProductAdmin = () => {
             color: "white",
             borderRadius: "3px",
             backgroundColor: "lightgreen",
-            fontWeight: "900",
-            width: "30%",
+            fontWeight: "600",
+            width: "40%",
             marginTop: ".5rem",
+            fontSize: ".6rem",
           }}
         >
           <AddIcon />
@@ -158,64 +171,77 @@ const ProductAdmin = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {product.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.price}</TableCell>
-                    <TableCell align="right">
-                      {row.isFeatured ? "Yes" : "No"}
-                    </TableCell>
-                    <TableCell align="right">
-                      {row.isArchived ? "Yes" : "No"}
-                    </TableCell>
-                    <TableCell>
-                      <Checkbox
-                        size="small"
-                        onChange={() => handleAddToCart(row)} // Appeler handleAddToCart avec les informations sur le produit
-                      />
-                    </TableCell>
-                    <TableCell align="right">{row.supply}</TableCell>
-                    <TableCell align="right">
-                      {sizes.find((size) => size.id === row.sizeId)?.name ||
-                        "-"}
-                    </TableCell>
-                    <TableCell align="right">
-                      {categories.find(
-                        (category) => category.id === row.categoryId
-                      )?.name || "-"}
-                    </TableCell>
-                    <TableCell align="right">
-                      {colors.find((color) => color.id === row.colorId)?.name ||
-                        "-"}
-                    </TableCell>
-                    <TableCell align="right">{row.updatedAt}</TableCell>
-                    <TableCell align="right">
-                      <IconButton onClick={() => handleEdit(row.id)}>
-                        {" "}
-                        {/* Appeler handleEdit avec l'identifiant de l'élément */}
-                        <ModeEditIcon
-                          sx={{
-                            color: "orange",
-                            marginRight: "1rem",
-                            cursor: "pointer",
-                          }}
+                {product
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <TableRow
+                      key={row.id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="right">{row.price}</TableCell>
+                      <TableCell align="right">
+                        {row.isFeatured ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.isArchived ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell>
+                        <Checkbox
+                          size="small"
+                          onChange={() => handleAddToCart(row)} // Appeler handleAddToCart avec les informations sur le produit
                         />
-                      </IconButton>
-                      <IconButton onClick={() => handleDelete(row.id)}>
-                        {" "}
-                        {/* Utiliser une fonction handleDelete similaire pour supprimer */}
-                        <DeleteIcon sx={{ color: "red", cursor: "pointer" }} />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                      <TableCell align="right">{row.supply}</TableCell>
+                      <TableCell align="right">
+                        {sizes.find((size) => size.id === row.sizeId)?.name ||
+                          "-"}
+                      </TableCell>
+                      <TableCell align="right">
+                        {categories.find(
+                          (category) => category.id === row.categoryId
+                        )?.name || "-"}
+                      </TableCell>
+                      <TableCell align="right">
+                        {colors.find((color) => color.id === row.colorId)
+                          ?.name || "-"}
+                      </TableCell>
+                      <TableCell align="right">{row.updatedAt}</TableCell>
+                      <TableCell align="right">
+                        <IconButton onClick={() => handleEdit(row.id)}>
+                          {" "}
+                          {/* Appeler handleEdit avec l'identifiant de l'élément */}
+                          <ModeEditIcon
+                            sx={{
+                              color: "orange",
+                              marginRight: "1rem",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </IconButton>
+                        <IconButton onClick={() => handleDelete(row.id)}>
+                          {" "}
+                          {/* Utiliser une fonction handleDelete similaire pour supprimer */}
+                          <DeleteIcon
+                            sx={{ color: "red", cursor: "pointer" }}
+                          />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 15]}
+              component="div"
+              count={product.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </TableContainer>
         </Box>
         {activeId && <UpdateProductAdmin id={activeId} />}{" "}

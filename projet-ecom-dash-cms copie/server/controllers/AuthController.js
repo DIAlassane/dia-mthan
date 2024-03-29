@@ -46,33 +46,6 @@ const RegisterUser = async (req, res) => {
   }
 };
 
-const LoginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ where: { email: email } });
-    if (!user)
-      return res.status(400).json({ msg: "Cet utilisateur n'existe pas" });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: "Email/Mot de passe incorrect" });
-    } else {
-      const token = jwt.sign(
-        { id: user.id, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: "15m" } // Expiration après 15 minutes
-      );
-
-      delete user.password;
-
-      res.status(200).json({ token, user });
-    }
-  } catch (error) {
-    res.status(401).json({ error: error.message });
-  }
-};
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -254,7 +227,6 @@ const deleteReview = async (req, res) => {
 
 module.exports = {
   RegisterUser,
-  LoginUser,
   login,
   logout,
   ForgotPassword,
