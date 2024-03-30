@@ -46,7 +46,7 @@ const NewCatHome = () => {
         width: "80%",
         marginLeft: "10%",
         marginBottom: "5vh",
-        marginTop: "5vh",
+        marginTop: "-5vh",
         borderRadius: "15px",
         height: "auto",
         padding: "3.5rem 2.5rem",

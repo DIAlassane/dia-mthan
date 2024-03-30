@@ -19,6 +19,11 @@ const RegisterUser = async (req, res) => {
       roleId, // Changez role en roleName pour éviter les conflits avec le modèle Role
     } = req.body;
 
+    const existingUser = await User.findOne({ where: { email: email } });
+    if (existingUser) {
+      return res.status(409).json({ error: "Cet utilisateur existe de déjà" });
+    }
+
     // Recherchez le rôle correspondant dans la base de données
     const role = await Role.findOne({ where: { id: roleId } });
 

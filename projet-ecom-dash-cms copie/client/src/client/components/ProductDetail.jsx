@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { addToCart } from "../../state/index";
+import { addToCart, addToCompare } from "../../state/index";
 import RelatedProduct from "./RelatedProduct";
 import Review from "./Review";
 
@@ -87,6 +87,24 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     dispatch(
       addToCart({
+        id: item.id,
+        image: item.image,
+        price: item.price,
+        description: item.description,
+        supply: item.supply,
+        name: item.name,
+        rating: item.rating,
+        review: item.review,
+        categoryId: item.categoryId,
+        sizeId: item.sizeId,
+        colorId: item.colorId,
+      })
+    );
+  };
+
+  const handleCompare = () => {
+    dispatch(
+      addToCompare({
         id: item.id,
         image: item.image,
         price: item.price,
@@ -288,6 +306,15 @@ const ProductDetail = () => {
                 }}
               >
                 ajouter
+              </Button>
+              <Button
+                onClick={handleCompare}
+                sx={{
+                  color: theme.palette.background.font,
+                  backgroundColor: theme.palette.background.alt,
+                }}
+              >
+                Compare
               </Button>
             </Box>
           </Box>

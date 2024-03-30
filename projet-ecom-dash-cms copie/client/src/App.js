@@ -15,6 +15,7 @@ import Transactions from "scenes/transactions";
 
 import NotFound from "client/components/NotFound";
 import Cart from "client/scenes/cart";
+import Compare from "client/scenes/compare";
 import DetailProduct from "client/scenes/detailProduct";
 import Home from "client/scenes/home";
 import LayoutClient from "client/scenes/layout";
@@ -59,6 +60,7 @@ function App() {
                 element={<Login currentUser={current_user} />}
               />
               <Route path="/register" element={<Register />} />
+              <Route path="/compare" element={<Compare />} />
               <Route path="/profil" element={<ProfilPage />} />
               <Route path="/home" element={<Home />} />
               <Route path="/productdetail/:id" element={<DetailProduct />} />

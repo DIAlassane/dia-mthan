@@ -1,3 +1,5 @@
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
   Box,
   Button,
@@ -6,6 +8,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import axios from "axios";
 import Validation from "protection/Validation";
 import { useState } from "react";
@@ -16,7 +20,6 @@ function Register() {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const roleId = process.env.REACT_APP_ROLE_ID;
   const navigate = useNavigate();
-
   const [values, setValues] = useState({
     name: "",
     email: "",
@@ -26,8 +29,17 @@ function Register() {
     occupation: "",
     roleId,
   });
-
   const [errors, setErrors] = useState({});
+  const [exists, setExists] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   function handleInput(event) {
     const { name, value } = event.target;
@@ -55,6 +67,7 @@ function Register() {
           if (err.response) {
             // Le serveur a répondu avec un statut d'erreur
             console.error("Erreur de réponse du serveur:", err.response.data);
+            setExists(err.response.data);
           } else if (err.request) {
             // La requête a été faite, mais aucune réponse n'a été reçue
             console.error("Aucune réponse du serveur");
@@ -80,6 +93,19 @@ function Register() {
             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
           }}
         >
+          <p
+            style={{
+              color: "red",
+              gridColumn: "span 4",
+              margin: "0",
+              padding: "0",
+              justifyContent: "center",
+              textAlign: "center",
+              backgroundColor: "white",
+            }}
+          >
+            {exists.error}
+          </p>
           <>
             <TextField
               label="Nom"
@@ -166,7 +192,21 @@ function Register() {
 
           <TextField
             label="Mot-de-passe"
-            type="password"
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             onChange={handleInput}
             name="password"
             sx={{ gridColumn: "span 4" }}

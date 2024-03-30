@@ -9,6 +9,7 @@ const initialState = {
   token: null,
   productData: [],
   cart: [],
+  compare: [],
   productCategory: [],
   currentStore: null,
 };
@@ -71,6 +72,27 @@ export const globalSlice = createSlice({
     resetHomeCat: (state) => {
       state.productCategory = [];
     },
+    addToCompare: (state, action) => {
+      const index = state.compare.findIndex(
+        (item) => item.id === action.payload.id
+      );
+
+      if (index !== -1) {
+        // L'élément existe déjà, mettez à jour la quantité
+        state.compare[index].quantity += action.payload.quantity;
+      } else {
+        // L'élément n'existe pas, ajoutez-le au tableau
+        state.compare.push(action.payload);
+      }
+    },
+    deleteCompare: (state, action) => {
+      state.compare = state.compare.filter(
+        (item) => item.id !== action.payload
+      );
+    },
+    resetCompare: (state) => {
+      state.compare = [];
+    },
     addToCart: (state, action) => {
       const index = state.cart.findIndex(
         (item) => item.id === action.payload.id
@@ -112,6 +134,9 @@ export const {
   setLogin,
   setLogout,
   addToCart,
+  addToCompare,
+  deleteCompare,
+  resetCompare,
   increamentQuantity,
   decrementQuantity,
   setProductData,

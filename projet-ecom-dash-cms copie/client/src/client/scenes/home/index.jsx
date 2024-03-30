@@ -9,7 +9,6 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import CategoryProductComponent from "client/components/CategoryProductComponent";
 import CategorySection from "client/components/CategorySection";
-import ImageListe from "client/components/ImageList";
 import LogoBanner from "client/components/LogoBanner";
 import NewCatHome from "client/components/NewCatHome";
 import ParallaxSection from "client/components/ParallaxSection";
@@ -45,14 +44,6 @@ const Home = () => {
     }),
   };
 
-  const stylebas = {
-    fontSize: "2rem",
-    fontWeight: "700",
-    color: theme.palette.background.font,
-    padding: "1.5rem 2.6rem",
-    fontFamily: "cursive",
-  };
-
   const styleAnimetedCategory = {
     display: "block",
     justifyContent: "center",
@@ -71,7 +62,7 @@ const Home = () => {
   };
 
   const styleBox3 = {
-    marginTop: "-2rem",
+    marginTop: "-8rem",
     padding: "3rem 0",
     backgroundColor: theme.palette.background.plus,
   };
@@ -82,13 +73,6 @@ const Home = () => {
     color: theme.palette.background.font,
     padding: "1.5rem 2.6rem",
     fontFamily: "cursive",
-  };
-
-  const styleBox4 = {
-    with: "100%",
-    height: "auto",
-    paddingBottom: "1rem",
-    backgroundColor: theme.palette.background.alt,
   };
 
   const styleDivider = {
@@ -150,10 +134,6 @@ const Home = () => {
         }}
       >
         <LogoBanner />
-      </Box>
-      <Box sx={styleBox4}>
-        <Typography sx={stylebas}>Nos Favoris </Typography>
-        <ImageListe />
       </Box>
       <NewCatHome />
     </Box>

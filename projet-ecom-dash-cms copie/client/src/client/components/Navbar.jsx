@@ -6,6 +6,7 @@ import {
   Search,
   SettingsOutlined,
 } from "@mui/icons-material";
+import CompareIcon from "@mui/icons-material/Compare";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
   AppBar,
@@ -45,6 +46,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, value, changeInput }) => {
   const handleClick = (event) => setAncherEl(event.currentTarget);
   const handleClose = () => setAncherEl(null);
   const product = useSelector((state) => state.cart);
+  const compare = useSelector((state) => state.compare);
 
   const handleLogout = () => {
     // Dispatch l'action de déconnexion
@@ -84,6 +86,11 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen, value, changeInput }) => {
 
         {/* DROITE */}
         <FlexBetween gap="1.5rem">
+          <IconButton onClick={() => navigate("/compare")}>
+            <Badge badgeContent={compare.length} color="error">
+              <CompareIcon />
+            </Badge>
+          </IconButton>
           <IconButton onClick={() => navigate("/cart")}>
             <Badge badgeContent={product.length} color="success">
               <ShoppingCartIcon />
