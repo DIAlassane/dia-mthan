@@ -60,18 +60,6 @@ const BentoGrid = () => {
         </Paper>
       </Grid>
 
-      {/* Case 3 : Hauteur plus petite */}
-      <Grid item xs={12} sm={6} md={4}>
-        <Paper sx={{ p: 2, height: "200px" }}>
-          <GlassmorphismPaper>
-            <Typography variant="h6">Poisson ou Viande</Typography>
-            <Typography>
-              Du poisson ou de la viande comme plat principal.
-            </Typography>
-          </GlassmorphismPaper>
-        </Paper>
-      </Grid>
-
       {/* Cases suivantes avec hauteur par défaut */}
       <Grid item xs={12} md={8}>
         <Paper sx={{ p: 2, height: "auto" }}>

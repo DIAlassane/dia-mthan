@@ -1,6 +1,7 @@
 import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import imgButtonSN from "../../assets/ButtonSN.png";
 
 const CartTotal = () => {
   const cart = useSelector((state) => state.cart);
@@ -74,8 +75,32 @@ const CartTotal = () => {
               width: "100%",
             }}
           />
-          <Box>
-            <Button onClick={() => {}}>commander</Button>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={imgButtonSN}
+              alt="buttonSN"
+              style={{
+                width: "100px",
+                height: "auto",
+              }}
+            />
+            <Button
+              sx={{
+                color: theme.palette.grey[900],
+                backgroundColor: theme.palette.grey[100],
+                height: "1.5rem",
+                marginTop: ".5rem",
+              }}
+              onClick={() => {}}
+            >
+              commander
+            </Button>
           </Box>
         </form>
       </Box>

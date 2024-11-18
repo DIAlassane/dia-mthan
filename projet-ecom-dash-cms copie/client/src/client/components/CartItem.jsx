@@ -1,6 +1,6 @@
 import { useTheme } from "@emotion/react";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Box, Button, ImageListItem, Rating, Typography } from "@mui/material";
+import { Box, Button, ImageListItem, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import {
   resetCart,
 } from "../../state/index";
 import NoCartItem from "./NoCartItem";
+import CustomPagination from "./Pagination";
 
 const CartItem = () => {
   const [categories, setCategories] = useState([]);
@@ -18,6 +19,13 @@ const CartItem = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const storeId = useSelector((state) => state.currentStore);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 3;
+  const indexOfLastItem = page * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = cartData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(cartData.length / itemsPerPage);
 
   useEffect(() => {
     // Fetch sizes, categories, and colors from backend
@@ -42,12 +50,13 @@ const CartItem = () => {
   return (
     <Box>
       <Box>
-        {cartData.map((item) => (
+        {currentItems.map((item) => (
           <Box
             key={item.id}
             sx={{
               display: "flex",
               width: "100%",
+              height: "15vh",
               justifyContent: "space-between",
               padding: "1rem 0",
               margin: "1rem 0",
@@ -75,8 +84,8 @@ const CartItem = () => {
               />
               <Box
                 sx={{
-                  width: "150px",
-                  height: "auto",
+                  width: "50px",
+                  height: "50px",
                   marginRight: ".5rem",
                   textAlign: "center",
                 }}
@@ -89,19 +98,13 @@ const CartItem = () => {
                 >
                   {item.name.substring(0, 5)}
                 </Typography>
-                <ImageListItem
-                  key={item.image}
-                  sx={{
-                    width: "100%",
-                    height: "100px",
-                  }}
-                >
+                <ImageListItem key={item.image}>
                   <img
                     src={`http://localhost:4000/${item.image}`}
                     alt={item.name}
-                    sx={{
-                      width: "auto",
-                      height: "auto",
+                    style={{
+                      width: "50px",
+                      height: "50px",
                     }}
                   />
                 </ImageListItem>
@@ -120,7 +123,7 @@ const CartItem = () => {
                   alignItems: "center",
                   textAlign: "center",
                   border: "2px solid black",
-                  height: "55px",
+                  height: "30px",
                   marginTop: "2.5rem",
                   backgroundColor: theme.palette.primary[100],
                 }}
@@ -145,7 +148,6 @@ const CartItem = () => {
                     color: "red",
                     fontSize: "2rem",
                     fontWeight: 900,
-                    cursor: "pointer",
                   }}
                 >
                   -
@@ -180,7 +182,6 @@ const CartItem = () => {
                     color: "green",
                     fontSize: "1rem",
                     fontWeight: 900,
-                    cursor: "pointer",
                   }}
                 >
                   +
@@ -197,13 +198,7 @@ const CartItem = () => {
                 },
               }}
             >
-              <Typography>
-                {item.price}
-                <br />
-                C.F.A
-              </Typography>
               <Typography>Stock: {item.supply}</Typography>
-              <Rating value={item.rating} readOnly />
               <Typography>
                 Category:{" "}
                 {categories.find((category) => category.id === item.categoryId)
@@ -216,14 +211,20 @@ const CartItem = () => {
                   fontWeight: "800",
                 }}
               >
-                {item.quantity * item.price}
-                <br />
-                C.F.A
+                {item.quantity * item.price} C.F.A
               </Typography>
             </Box>
           </Box>
         ))}
       </Box>
+      {cartData.length > 0 && (
+        <CustomPagination
+          page={page}
+          setPage={setPage}
+          itemsPerPage={itemsPerPage}
+          totalPages={totalPages}
+        />
+      )}
       <Box>
         <Button
           onClick={() => dispatch(resetCart())}

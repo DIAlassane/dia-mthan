@@ -102,8 +102,8 @@ export const globalSlice = createSlice({
         // L'élément existe déjà, mettez à jour la quantité
         state.cart[index].quantity += action.payload.quantity;
       } else {
-        // L'élément n'existe pas, ajoutez-le au tableau
-        state.cart.push(action.payload);
+        // L'élément n'existe pas, ajoutez-le au tableau avec une quantité de 1
+        state.cart.push({ ...action.payload, quantity: 1 });
       }
     },
     deleteItem: (state, action) => {
@@ -122,9 +122,10 @@ export const globalSlice = createSlice({
       const { id } = action.payload;
       state.cart = state.cart.map((item) =>
         item.id === id
-          ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
+          ? { ...item, quantity: Math.max(item.quantity - 1, 1) }
           : item
       );
+      state.cart = state.cart.filter((item) => item.quantity > 0);
     },
   },
 });

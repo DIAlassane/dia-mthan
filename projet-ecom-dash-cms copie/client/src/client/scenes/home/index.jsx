@@ -10,7 +10,6 @@ import "aos/dist/aos.css";
 import CategoryProductComponent from "client/components/CategoryProductComponent";
 import CategorySection from "client/components/CategorySection";
 import LogoBanner from "client/components/LogoBanner";
-import NewCatHome from "client/components/NewCatHome";
 import ParallaxSection from "client/components/ParallaxSection";
 import HomeColor from "client/widget/HomeColor";
 import { motion } from "framer-motion";
@@ -135,7 +134,7 @@ const Home = () => {
       >
         <LogoBanner />
       </Box>
-      <NewCatHome />
+      {/* <NewCatHome /> */}
     </Box>
   );
 };
